@@ -116,4 +116,4 @@ This project is released under the [MIT License](LICENSE).
 
 ### ✉️ Contact
 
-Maintainer – **Ken Su** · [GitHub @KenSu223](https://github.com/KenSu223)
+Maintainer – **Shijia Huang** · [GitHub]([https://github.com/KenSu223](https://github.com/Shijia-Huang))
