@@ -77,7 +77,7 @@ docker compose up --build
 | Variable            | Purpose                                | Default               |
 |---------------------|----------------------------------------|-----------------------|
 | `GOOGLE_API_KEY`    | Your Gemini API key                    | _required_            |
-| `SIM_THRESHOLD`     | Min cosine similarity for retrieved chunk | `0.7`                 |
+| `SIM_THRESHOLD`     | Min cosine similarity for retrieved chunk | `0.01` (adjustable)                 |
 | `TOP_K`             | Number of context chunks to send to LLM | `5`                   |
 | `MODEL_NAME`        | Gemini model (`gemini-2.0-flash`/`-pro`) | `gemini-2.0-flash`    |
 
@@ -87,20 +87,26 @@ Update values in **`api.py`** or via environment variables.
 
 ## 📑 API Reference
 
-| Method | Route | Body (JSON)           | Response (JSON)                |
-|--------|-------|-----------------------|--------------------------------|
-| `POST` | `/ask`| `{ "query": "..." }`  | `{ "answer": "...", "context": [...] }` |
+| Method | Route | Body (JSON)           | Response (JSON)                                               |
+|--------|-------|-----------------------|----------------------------------------------------------------|
+| `POST` | `/ask`| `{ "query": "..." }`  | `{ "answer": "...", "similarities": [...], "retrieved_ids": [...] }` |
 
 ---
 
 ## 🗂️ Project Layout
 
 ```
-├─ api.py            # FastAPI server + FAISS search
-├─ llm.py            # Gemini wrapper
-├─ data/faq_chunks.pkl
-├─ models/           # Sentence‑Transformers embeddings
-├─ templates/        # (unused) Jinja templates
+├─ api.py              # FastAPI server + FAISS search
+├─ build_index.py      # Build FAISS index from chunks
+├─ environment.yml     # Conda environment definition
+├─ faiss_index.bin     # Saved FAISS index
+├─ faq_pairs.jsonl     # Raw FAQ data
+├─ llm.py              # Gemini wrapper
+├─ metadata.pkl        # Retrieved FAISS metadata
+├─ QA.txt              # Misc questions and prompts
+├─ requirements.txt    # Python dependencies
+├─ scraper.py          # HTML to chunk pipeline
+├─ system_prompt.txt   # System prompt used for Gemini
 └─ README.md
 ```
 
@@ -116,10 +122,12 @@ Update values in **`api.py`** or via environment variables.
 
 ## 📄 License
 
-This project is released under the [MIT License](LICENSE).
+This project is released under the [MIT License](LICENSE).  
+Created as a prototype using only public data and tools.  
+Not officially sponsored or commissioned by any organization.
 
 ---
 
 ### ✉️ Contact
 
-Maintainer – **Shijia Huang** · [GitHub]([https://github.com/KenSu223](https://github.com/Shijia-Huang))
+Maintainer – **Shijia Huang** · [GitHub](https://github.com/Shijia-Huang)
