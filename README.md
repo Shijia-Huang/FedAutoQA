@@ -15,7 +15,7 @@ It combines semantic search (Sentence‑Transformers + FAISS) with Google’
 - **RAG pipeline** – dense embedding search retrieves top‑K FAQ chunks and feeds them to Gemini with a strict system prompt  
 - **Stateless API** – single `/ask` POST endpoint; easy to integrate into any frontend  
 - **Docker-ready** – run the full stack with `docker compose up`  
-- **Configurable LLM** – switch between `gemini‑2.0‑flash` and `gemini‑2.0‑pro` with a single setting  
+- **Configurable LLM** – can switch between `gemini‑2.0‑flash` and `gemini‑2.0‑pro` with a single setting  
 - **Test corpus included** – ships with ~2 MB of HCUP FAQ data split into 300+ chunks for instant experimentation  
 
 ---
