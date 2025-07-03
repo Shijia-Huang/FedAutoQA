@@ -48,8 +48,13 @@ cd FedAutoQA
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# 3. Set your Gemini key
+# 3.a Set your Gemini key
 export GOOGLE_API_KEY="<YOUR_TOKEN>"           # or GEMINI_API_KEY
+
+# 3.b (optioinal) You could also create your own .env file in the project root (same level as api.py). The key will be accessible until you close the terminal (or unset it), and it won’t persist across terminal sessions 
+cp .env.example .env
+# Open .env and replace the placeholder with your actual API key, then the application will automatically load this key using python-dotenv.
+GOOGLE_API_KEY=your-google-api-key-here
 
 # 4. Fire it up
 uvicorn api:app --reload

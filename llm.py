@@ -7,8 +7,9 @@ Only answers from supplied context; refuses otherwise.
 import os, textwrap
 from typing import List
 from dotenv import load_dotenv
-from google import genai
-from google.genai import types
+# from google import genai
+# from google.genai import types
+import google.generativeai as genai
 
 # Load environment variables (.env optional)
 load_dotenv()
@@ -19,7 +20,10 @@ if not API_KEY:
     )
 
 # Initialise Gemini client
-client = genai.Client(api_key=API_KEY)
+genai.configure(api_key=API_KEY)
+# client = genai.Client(api_key=API_KEY) ## another version
+
+
 MODEL_NAME = "gemini-2.0-flash"  # or "gemini-2.0-pro" for higher quality
 
 SYSTEM_PROMPT = textwrap.dedent("""
@@ -33,7 +37,7 @@ SYSTEM_PROMPT = textwrap.dedent("""
 def answer_with_context(query: str, contexts: List[str]) -> str:
     """
     Send the query plus retrieved context to Gemini and return the text answer.
-    Uses the low‑level `client.models.generate_content` call pattern.
+    Uses the Google Generative AI SDK via `GenerativeModel`.
     """
     if not contexts:
         return "I’m sorry, I don’t have that information."
@@ -42,14 +46,18 @@ def answer_with_context(query: str, contexts: List[str]) -> str:
     contents = f"CONTEXT:\n{joined_ctx}\n\nQUESTION:\n{query}"
 
     try:
-        # Gemini SDK expects `system_instruction` when supplying a system prompt.
-        response = client.models.generate_content(
-            model=MODEL_NAME,
-            contents=contents,
-            config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPT
-            )
+        model = genai.GenerativeModel(model_name=MODEL_NAME)
+        response = model.generate_content(
+            [SYSTEM_PROMPT, contents]
         )
+        # commented out another version of using client
+        # # Gemini SDK expects `system_instruction` when supplying a system prompt.
+        # response = client.models.generate_content(
+        #     model=MODEL_NAME,
+        #     contents=contents,
+        #     config=types.GenerateContentConfig(
+        #         system_instruction=SYSTEM_PROMPT
+        #     )
         return response.text.strip()
     except Exception as e:
         # Fail fast but clearly

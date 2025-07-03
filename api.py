@@ -13,7 +13,7 @@ from llm import answer_with_context  # Gemini RAG wrapper
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 INDEX_FILE = "faiss_index.bin"
 META_FILE  = "metadata.pkl"
-SIM_THRESHOLD = 0.5      # tweak via evaluation
+SIM_THRESHOLD = 0.01      # tweak via evaluation
 TOP_K = 5  # number of FAQ chunks to feed the LLM
 
 # ---- default system prompt for fallback answers ----
@@ -62,6 +62,7 @@ def ask(req: AskReq):
     return {
         "answer": answer_text,
         "similarities": [sim for sim, _ in scored],
+        "retrieved_ids": [metadata[idx]['id'] for _, idx in scored],
     }
 
 if __name__ == "__main__":
